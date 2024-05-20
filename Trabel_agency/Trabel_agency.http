@@ -1,0 +1,6 @@
+@Trabel_agency_HostAddress = http://localhost:5019
+
+GET {{Trabel_agency_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
