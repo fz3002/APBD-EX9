@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Trabel_agency.Controllers;
+namespace Travel_agency.Controllers;
 
 [ApiController]
-[Route("api/TrabelAgency")]
+[Route("api/trips")]
 public class TravelAgencyController : ControllerBase
 {
 

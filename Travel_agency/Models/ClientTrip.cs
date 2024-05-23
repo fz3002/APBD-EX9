@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Trabel_agency.Models;
+namespace Travel_agency.Models;
 
 public partial class ClientTrip
 {

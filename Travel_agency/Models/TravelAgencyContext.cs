@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Trabel_agency.Models;
+namespace Travel_agency.Models;
 
 public partial class TravelAgencyContext : DbContext
 {
