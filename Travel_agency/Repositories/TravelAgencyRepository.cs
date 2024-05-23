@@ -8,14 +8,35 @@ public class TravelAgencyRepository : ITravelAgencyRepository
 {
     private readonly TravelAgencyContext _context = new TravelAgencyContext();
 
+    public async Task<int> DeleteClient(int idClient)
+    {
+        var clientToDelete = await _context.Clients.FindAsync(idClient);
+        if (clientToDelete != null)
+        {
+            _context.Clients.Remove(clientToDelete);
+
+            await _context.SaveChangesAsync();
+
+            return 1;
+        }
+        else return 0;
+    }
+
     public async Task<int> GetAllTripsCount()
     {
         return await _context.Trips.CountAsync();
     }
 
+    public async Task<int> GetClientTrips(int idClient)
+    {
+        return await _context.ClientTrips.Where(x => x.IdClient == idClient).CountAsync();
+    }
+
     public async Task<IEnumerable<TripDTO>> GetTrips(int page, int pageSize)
     {
-        var paged = await _context.Trips
+        List<Trip> paged;
+        if(page > 0){
+            paged = await _context.Trips
                             .Include(x => x.ClientTrips)
                             .ThenInclude(ct => ct.IdClientNavigation)
                             .Include(x => x.IdCountries)
@@ -24,6 +45,16 @@ public class TravelAgencyRepository : ITravelAgencyRepository
                             .Skip((page - 1)*pageSize)
                             .Take(pageSize)
                             .ToListAsync();
+        }else{
+            paged = await _context.Trips
+                            .Include(x => x.ClientTrips)
+                            .ThenInclude(ct => ct.IdClientNavigation)
+                            .Include(x => x.IdCountries)
+                            .Include(x => x.ClientTrips)
+                            .OrderByDescending(x => x.DateFrom)
+                            .ToListAsync();
+        }
+        
         
         var result = paged.Select(c => new TripDTO
         (

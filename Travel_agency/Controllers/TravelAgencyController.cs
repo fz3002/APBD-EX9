@@ -4,7 +4,7 @@ using Travel_agency.Services;
 namespace Travel_agency.Controllers;
 
 [ApiController]
-[Route("api/trips")]
+[Route("api")]
 public class TravelAgencyController : ControllerBase
 {
 
@@ -14,8 +14,8 @@ public class TravelAgencyController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetTrips(CancellationToken cancellationToken, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    [HttpGet("trips")]
+    public async Task<IActionResult> GetTrips(CancellationToken cancellationToken, [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
     {
         try
         {
@@ -28,4 +28,29 @@ public class TravelAgencyController : ControllerBase
         }
 
     }
+
+    [HttpDelete("clients/{idClient:int}")]
+    public async Task<IActionResult> DeleteTrips(int idClient, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _service.DeleteTrips(idClient);
+            if (result == -1)
+            {
+                return BadRequest("Unable to delete. Client has reserved trips");
+            }
+            else if (result == 0)
+            {
+                return BadRequest("Client not found");
+            }
+            return Ok();
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+    }
+
+    [HttpPost("trips/{idTrip:int}/clients")]
+    public async Task<IActionResult> AddClientToTrip(ClientTripDTO )
 }

@@ -12,6 +12,16 @@ public class TravelAgencyService : ITravelAgencyService
         _repository = repository;
     }
 
+    public async Task<int> DeleteTrips(int idClient)
+    {
+        var clientTrips = await _repository.GetClientTrips(idClient);
+        if (clientTrips >0)
+        {
+            return -1;
+        }
+        return await _repository.DeleteClient(idClient);
+    }
+
     public async Task<PagedTripsDTO> GetTrips(int page1, int pageSize)
     {
         var trips = await _repository.GetTrips(page1, pageSize);
