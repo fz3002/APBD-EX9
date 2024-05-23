@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Travel_agency.DTO;
 using Travel_agency.Services;
 
 namespace Travel_agency.Controllers;
@@ -52,5 +53,36 @@ public class TravelAgencyController : ControllerBase
     }
 
     [HttpPost("trips/{idTrip:int}/clients")]
-    public async Task<IActionResult> AddClientToTrip(ClientTripDTO )
+    public async Task<IActionResult> AddClientToTrip(int idTrip, ClientTripDTO clientToAdd, CancellationToken cancellationToken)
+    {
+        try
+        {
+           var result = await _service.AddClientToTrip(idTrip, clientToAdd);
+           if (result == -1)
+            {
+                return BadRequest("Client with this Pesel Already Exists");
+            }
+            else if (result == -2)
+            {
+                return BadRequest("Client with this Pesel is already added to this trip");
+            }
+            else if (result == -3)
+            {
+                return BadRequest("Trip doesn't exist");
+            }
+            else if (result == -4)
+            {
+                return BadRequest("Trip has already happened");
+            }
+            else if (result == 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return Ok();
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+    }
 }

@@ -1,3 +1,3 @@
 namespace Travel_agency.DTO;
 
-public record ClientTripDTO(string FirstName, string LastName, string Email, string Telephone, string Pesel, int IdTrip, string TripName, string? PaymentDate);
+public record ClientTripDTO(string FirstName, string LastName, string Email, string Telephone, string Pesel, DateTime? PaymentDate);
